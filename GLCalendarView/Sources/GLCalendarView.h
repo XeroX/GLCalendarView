@@ -30,6 +30,8 @@
 @property (nonatomic, strong) UIColor *backToTodayButtonColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *backToTodayButtonBorderColor UI_APPEARANCE_SELECTOR;
 
+@property (nonatomic, strong) UIColor *weekDaysViewBackgroundColor UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, readonly) NSCalendar *calendar;
 @property (nonatomic, copy) NSDate *firstDate;
 @property (nonatomic, copy) NSDate *lastDate;

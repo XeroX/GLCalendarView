@@ -95,6 +95,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.magnifierContainer.hidden = YES;
     
     [self reloadAppearance];
+    
+    self.collectionView.backgroundColor = self.weekDaysViewBackgroundColor;
 }
 
 - (void)layoutSubviews
@@ -105,6 +107,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)setupWeekDayTitle
 {
+    self.weekDayTitle.backgroundColor = self.weekDaysViewBackgroundColor;
     [self.weekDayTitle.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGFloat width = (CGRectGetWidth(self.bounds) - self.padding * 2) / 7;
     CGFloat centerY = self.weekDayTitle.bounds.size.height / 2;
@@ -134,6 +137,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
     self.monthCoverView.textAttributes = self.monthCoverAttributes;
+    self.weekDaysViewBackgroundColor = appearance.weekDaysViewBackgroundColor ?: [UIColor whiteColor];
 }
 
 #pragma mark - public api
