@@ -26,11 +26,14 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 @property (nonatomic) BOOL draggingBeginDate;
 @property (nonatomic) BOOL draggingEndDate;
 
+@property (nonatomic, copy, readwrite) NSDate *visibleMonthDate;
+
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIView *weekDayTitle;
 @property (weak, nonatomic) IBOutlet GLCalendarMonthCoverView *monthCoverView;
 @property (weak, nonatomic) IBOutlet UIView *magnifierContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *maginifierContentView;
+
 @end
 
 @implementation GLCalendarView
@@ -109,20 +112,21 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     self.weekDayTitle.backgroundColor = self.weekDaysViewBackgroundColor;
     [self.weekDayTitle.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    CGFloat width = (CGRectGetWidth(self.bounds) - self.padding * 2) / 7;
-    CGFloat centerY = self.weekDayTitle.bounds.size.height / 2;
+
+    CGFloat width = (CGRectGetWidth(self.bounds) - self.padding * 2.0f) / 7.0f;
+    CGFloat centerY = CGRectGetMidY(self.weekDayTitle.bounds);
     NSArray *titles = [[[NSDateFormatter alloc] init] veryShortStandaloneWeekdaySymbols];
-    NSInteger firstWeekDayIdx = [self.calendar firstWeekday] - 1;  // Sunday == 1
+    NSUInteger firstWeekDayIdx = [self.calendar firstWeekday] - 1;  // Sunday == 1
     if (firstWeekDayIdx > 0) {
         NSArray *post = [titles subarrayWithRange:NSMakeRange(firstWeekDayIdx, 7 - firstWeekDayIdx)];
         NSArray *pre = [titles subarrayWithRange:NSMakeRange(0, firstWeekDayIdx)];
         titles = [post arrayByAddingObjectsFromArray:pre];
     }
-    for (int i = 0; i < titles.count; i++) {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, 20)];
+    for (NSUInteger i = 0; i < titles.count; i++) {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, 0.0f, width, 20.0f)];
         label.textAlignment = NSTextAlignmentCenter;
         label.attributedText = [[NSAttributedString alloc] initWithString:titles[i] attributes:self.weekDayTitleAttributes];
-        label.center = CGPointMake(self.padding + i * width + width / 2, centerY);
+        label.center = CGPointMake(self.padding + width / 2 + i * width, centerY);
         [self.weekDayTitle addSubview:label];
     }
 }
@@ -347,12 +351,36 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
                      withVelocity:(CGPoint)velocity
               targetContentOffset:(inout CGPoint *)targetContentOffset
 {
+    [self updateVisibleMonth];
+
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         self.monthCoverView.alpha = 0;
         self.collectionView.alpha = 1;
     } completion:^(BOOL finished) {
         self.monthCoverView.hidden = YES;
     }];
+}
+
+#pragma mark -
+
+- (void)updateVisibleMonth
+{
+    NSArray *visibleIndexPaths = [self.collectionView.indexPathsForVisibleItems sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        NSInteger r1 = [obj1 row];
+        NSInteger r2 = [obj2 row];
+        NSInteger s1 = [obj1 section];
+        NSInteger s2 = [obj2 section];
+
+        if (r1 > r2 || s1 > s2) {
+            return NSOrderedDescending;
+        }
+        if (r1 < r2 || s1 < s2) {
+            return NSOrderedAscending;
+        }
+        return NSOrderedSame;
+    }];
+
+    self.visibleMonthDate = [self dateForCellAtIndexPath:visibleIndexPaths[visibleIndexPaths.count / 2 + 1]];
 }
 
 # pragma mark - Edit range

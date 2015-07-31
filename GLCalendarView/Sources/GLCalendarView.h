@@ -33,12 +33,17 @@
 @property (nonatomic, strong) UIColor *weekDaysViewBackgroundColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *collectionViewBackgroundColor UI_APPEARANCE_SELECTOR;
 
+
 @property (nonatomic, readonly) NSCalendar *calendar;
 @property (nonatomic, copy) NSDate *firstDate;
 @property (nonatomic, copy) NSDate *lastDate;
+@property (nonatomic, copy, readonly) NSDate *visibleMonthDate;
+
 @property (nonatomic, strong) NSMutableArray *ranges;
 @property (nonatomic) BOOL showMaginfier;
+
 @property (nonatomic, weak) id<GLCalendarViewDelegate> delegate;
+
 - (void)reload;
 - (void)addRange:(GLCalendarDateRange *)range;
 - (void)removeRange:(GLCalendarDateRange *)range;
