@@ -96,7 +96,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     
     [self reloadAppearance];
     
-    self.collectionView.backgroundColor = self.weekDaysViewBackgroundColor;
+    self.collectionView.backgroundColor = self.collectionViewBackgroundColor;
 }
 
 - (void)layoutSubviews
@@ -138,6 +138,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
     self.monthCoverView.textAttributes = self.monthCoverAttributes;
     self.weekDaysViewBackgroundColor = appearance.weekDaysViewBackgroundColor ?: [UIColor whiteColor];
+    self.collectionViewBackgroundColor = appearance.collectionViewBackgroundColor ?: [UIColor whiteColor];
 }
 
 #pragma mark - public api
