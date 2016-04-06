@@ -320,7 +320,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.cellWidth, self.rowHeight);
+    //NOTE: In future we should use MAX(width, DEFAULT_HEIGHT) 
+    return CGSizeMake(self.rowHeight, self.rowHeight);
 }
 
 - (CGFloat)cellWidth
